@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual Environment
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Environment variables
+.env
+.env.local
+
+# Pytest
+.pytest_cache/
+.cache/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+
+# Playwright
+playwright-report/
+test-results/
+trace.zip
+*.trace.zip
+videos/
+downloads/
+
+# Screenshots and artifacts
+screenshots/
+logs/
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Test outputs
+allure-results/
+allure-report/
+
+# Temporary files
+*.tmp
+*.bak
+.temp/
+
