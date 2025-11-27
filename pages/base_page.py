@@ -8,6 +8,7 @@ class BasePage:
     """Base page class that all page objects inherit from."""
 
     LOADER_SELECTOR = "#page-loader"
+    ALERT_SELECTOR = ".MuiSnackbar-root"
 
     def __init__(self, page: Page):
         self.page = page
@@ -306,3 +307,12 @@ class BasePage:
         """Get an attribute value from the nth matching child element (0-based index)."""
         child = self.find_child_element(parent_selector, child_selector)
         return child.nth(index).get_attribute(attribute)
+
+    def is_alert_displayed(self, alert_selector: str = ALERT_SELECTOR) -> bool:
+        """Wait for the page loader to show up and then disappear within 20 seconds each."""
+        try:
+            self.page.wait_for_selector(alert_selector, state="visible", timeout=5000)
+            self.page.wait_for_selector(alert_selector, state="hidden", timeout=20000)
+            return True
+        except Exception:
+            return False

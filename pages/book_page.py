@@ -10,7 +10,7 @@ class BookPage(BasePage):
 
     # Book Cards
     READY_TO_EDIT_CARD = "#ready-to-edit-card"
-    PAGE_BY_PAGE_CARD = "#Page-By-Page Product Builder"
+    PAGE_BY_PAGE_CARD = "#page-by-page-card"
 
     BATCH_CARD_CLASS = ".batchCard"
 

@@ -25,7 +25,7 @@ def context(context: BrowserContext, config: Config):
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
-    """Attach screenshot to Allure report on test failure."""
+    """Attach screenshot and additional debug info to Allure report on test failure."""
     outcome = yield
     report = outcome.get_result()
     
@@ -34,11 +34,28 @@ def pytest_runtest_makereport(item, call):
         if "page" in item.funcargs:
             page = item.funcargs["page"]
             try:
-                screenshot = page.screenshot()
+                # Capture screenshot
+                screenshot = page.screenshot(full_page=True)
                 allure.attach(
                     screenshot,
                     name="Screenshot on failure",
                     attachment_type=allure.attachment_type.PNG
                 )
+                
+                # Capture page URL
+                allure.attach(
+                    page.url,
+                    name="Page URL",
+                    attachment_type=allure.attachment_type.TEXT
+                )
+                
+                # Capture HTML content
+                html_content = page.content()
+                allure.attach(
+                    html_content,
+                    name="Page HTML",
+                    attachment_type=allure.attachment_type.HTML
+                )
+                
             except Exception as e:
-                print(f"Failed to capture screenshot: {e}")
+                print(f"Failed to capture debug information: {e}")

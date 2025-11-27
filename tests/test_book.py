@@ -78,3 +78,44 @@ class TestBook:
             name="Book Creation URL",
             attachment_type=allure.attachment_type.TEXT,
         )
+
+    @pytest.mark.smoke
+    @allure.title("Create Book Page-by-Page")
+    @allure.description("Verify that the book creates successfully")
+    @allure.severity(allure.severity_level.CRITICAL)
+    def test_create_page_by_page_book(self, page: Page, config: Config):
+        """Test that the login page opens successfully."""
+        with allure.step("Initialize login page"):
+            login_page = LoginPage(page, config.BASE_URL)
+            login_page.navigate()
+
+            login_page.login(config.TEST_USER_EMAIL, config.TEST_USER_PASSWORD)
+
+            book_page = BookPage(page, config.BASE_URL)
+            book_page.click_element(book_page.CLOSE_ONBOARDING_MODAL_BTN)
+            book_page.click_element(book_page.CREATE_DIGITA_PRODUCT_BTN)
+
+            book_page.is_page_loader_visible()
+
+            book_page.click_element(book_page.PAGE_BY_PAGE_CARD)
+
+            book_page.is_page_loader_visible()
+
+            book_branding_page = BookBrandingPage(page, config.BASE_URL)
+            book_branding_page.wait_and_click_element(
+                book_branding_page.BRANDING_LOOKS_GOOD_NEXT_BUTTON
+            )
+
+            book_branding_page.is_page_loader_visible()
+            book_branding_page.wait_and_click_element(
+                book_branding_page.COVER_ASSEMBLER_LOOKS_GOOD_NEXT_BUTTON
+            )
+
+            book_branding_page.is_page_loader_visible()
+
+            book_branding_page.fill_book_title()
+            book_branding_page.fill_book_subtitle()
+
+            book_branding_page.wait_and_click_element(
+                book_branding_page.COVER_ASSEMBLER_LOOKS_GOOD_NEXT_BUTTON
+            )
