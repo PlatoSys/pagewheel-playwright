@@ -1,19 +1,17 @@
 # Playwright Frontend Testing
 
-Basic Playwright testing framework for frontend automation testing.
+Playwright testing framework for frontend automation testing using TypeScript.
 
 ## Setup
 
-1. **Create and activate virtual environment:**
+1. **Install dependencies:**
 ```bash
-python3 -m venv env
-source env/bin/activate  # On Windows: env\Scripts\activate
+npm install
 ```
 
-2. **Install dependencies:**
+2. **Install Playwright browsers:**
 ```bash
-pip install -r requirements.txt
-playwright install chromium
+npx playwright install chromium
 ```
 
 3. **Configure environment:**
@@ -26,50 +24,51 @@ cp .env.example .env
 
 ### Run all tests:
 ```bash
-pytest
+npm test
 ```
 
-### Run with different browsers:
+### Run smoke tests:
 ```bash
-pytest --browser chromium
-pytest --browser firefox
-pytest --browser webkit
+npm run test:smoke
 ```
 
-### Run in headless mode:
+### Run with specific browser:
 ```bash
-pytest --headed=false
+npm run test:chromium
+npm run test:firefox
+npm run test:webkit
 ```
 
-### Run specific test:
+### Run in headed mode:
 ```bash
-pytest tests/test_login.py::TestLogin::test_open_login_page
+npm run test:headed
 ```
 
-### Run with markers:
+### Run with Playwright UI:
 ```bash
-pytest -m smoke
+npm run test:ui
+```
+
+### Run a specific test file:
+```bash
+npx playwright test tests/login.spec.ts
+```
+
+### View HTML report:
+```bash
+npm run report
 ```
 
 ## Allure Reports
 
-### Quick start - Run tests and view report:
+### Generate and view report:
 ```bash
-./run_with_allure.sh
-```
-
-### Manual commands:
-```bash
-# Run tests (generates allure-results)
-pytest
-
-# Generate and open HTML report
-allure serve allure-results
+npm run allure:serve
 ```
 
 ### Generate static HTML report:
 ```bash
-allure generate allure-results -o allure-report --clean
+npm run allure:generate
 ```
 
 **Note:** You need to install Allure command-line tool first:
@@ -77,38 +76,31 @@ allure generate allure-results -o allure-report --clean
 - **Linux:** Download from [Allure releases](https://github.com/allure-framework/allure2/releases)
 - **Windows:** `scoop install allure`
 
-### Allure Features Included:
-- ✅ Test steps with `@allure.step()`
-- ✅ Test categorization with `@allure.feature()` and `@allure.story()`
-- ✅ Automatic screenshot capture on test failure
-- ✅ Test severity levels
-- ✅ Custom attachments (URLs, logs, etc.)
-
 ## Project Structure
 
 ```
-playwright-fe/
-├── config/               # Configuration files
+pagewheel-playwright/
+├── config/               # Configuration
 ├── pages/                # Page Object Models
-├── tests/                # Test cases
-├── conftest.py           # Pytest fixtures with Allure integration
-├── pytest.ini            # Pytest configuration
-├── allure.properties     # Allure configuration
-├── run_with_allure.sh    # Helper script to run tests and view report
-├── requirements.txt      # Python dependencies
-├── .gitignore            # Git ignore file
+├── tests/                # Test specs
+├── playwright.config.ts  # Playwright configuration
+├── package.json          # Node.js dependencies
 └── README.md             # This file
 ```
 
 ## Writing Tests
 
-Tests follow the Page Object Model pattern. Create page objects in `pages/` and test cases in `tests/`.
+Tests follow the Page Object Model pattern. Create page objects in `pages/` and test specs in `tests/`.
 
 Example test:
-```python
-def test_example(page: Page, config: Config):
-    login_page = LoginPage(page, config.BASE_URL)
-    login_page.navigate()
-    assert login_page.is_loaded()
-```
+```typescript
+import { test, expect } from '@playwright/test';
+import { LoginPage } from '../pages/login-page';
+import { config } from '../config/config';
 
+test('example test', async ({ page }) => {
+  const loginPage = new LoginPage(page, config.BASE_URL);
+  await loginPage.navigate();
+  expect(loginPage.isLoaded()).toBeTruthy();
+});
+```
